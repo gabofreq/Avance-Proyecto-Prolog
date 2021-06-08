@@ -1,4 +1,5 @@
-# Avance de Proyecto Prolog
+## Avance de Proyecto Prolog - Materia Principios de Lenguajes de Programación
+### Maestria en Ciencias Computacionales
 En esta primera parte del proyecto se reconoce si un string provisto es o no es una expresión matemática básica en lenguaje Python. Escribir este reconocedor les ayudará a escribir la base del resto del proyecto.  Un string no es otra cosa que una secuencia de caracteres. Primero deben de poder agrupar estos caracteres basados en ciertas reglas que les permitirán tener ahora una secuencia de tokens. Por ejemplo, la expresión “result = oldsum - value / 100” resulta en la siguiente lista de tokens:         [ “result”, “=”, “oldsum”, “-“, “value”, “/”, “100” ]  Estas reglas para separar tokens no son muy complejas, existe una lista de caracteres bien especifica, en el ejemplo se puede observar que todo está separado limpiamente por espacios pero en general los operadores también pueden separarse de los otros tokens sin necesidad de whitespace.
 
 Deben de escribir este tokenizer primero.
