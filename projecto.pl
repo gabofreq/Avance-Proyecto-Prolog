@@ -88,12 +88,15 @@ expr0(['('|TSBefore],TSAfter):- expr(TSBefore,[')'|TSAfter]).%hecho
 
 expr1(TSBefore,TSAfter):-expr0(TSBefore, Rest).% Primera regla recursiva
 expr1(TSBefore,TSAfter):-
-	expr0(TSBefore,[Opr|TSAfter]).
+	expr1(TSBefore,[Opr|TSAfter]).
 	op2(Op2).
 	expr0(TSBefore,TSAfter).% Segunda regla de recursividad        
 
 expr2(TSBefore,TSAfter):-expr1(TSBefore,TSAfter).% Primera regla recursividad
-expr2(TSBefore,TSAfter):-expr1(TSBefore,[Opr|TSAfter]),op1(Op1),expr(TSBefore,TSAfter).% Segunda regla recursividad
+expr2(TSBefore,TSAfter):-
+	expr2(TSBefore,[Opr|TSAfter]).
+	op1(Op1).
+	expr1(TSBefore,TSAfter).% Segunda regla recursividad
 
 % Programas
 
