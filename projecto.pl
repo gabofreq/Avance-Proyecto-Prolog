@@ -52,10 +52,7 @@ tokenize(Z) --> "<=", tokenize(Y), {Z = [<= | Y]}.
 tokenize(Z) --> "<>", tokenize(Y), {Z = [<> | Y]}.
 tokenize(Z) --> ">",  tokenize(Y), {Z = [> | Y]}.
 tokenize(Z) --> "<",  tokenize(Y), {Z = [< | Y]}.
-tokenize(Z) --> "+",  tokenize(Y), {Z = [+ | Y]}.
-tokenize(Z) --> "-",  tokenize(Y), {Z = [- | Y]}.
-tokenize(Z) --> "*",  tokenize(Y), {Z = [* | Y]}.
-tokenize(Z) --> "/",  tokenize(Y), {Z = [/ | Y]}.
+
 
 
 % Tokenize float
@@ -72,25 +69,33 @@ tokenize([N|R]) --> [C],{C>32},
                         {name(N,[C])},tokenize(R).
 tokenize([])-->[].
 
+% Deficion operadores
+op1(+).
+op1(-).
+op2(*).
+op2(/).
+op(Opr):- op1(Opr)  |  op2(Opr).
 
-op1(Opr):- Opr = '+'; Opr = '-'.
-op2(Opr):- Opr = '*'; Opr = '/'.
-id(X):- atom(X).
-inte(X):- integer(X).
-floate(X):- float(X).
-stringe(X):- string(X).
+% Relacion id
+id(X):- atom(X), \+ op1(X), \+ op2(X). 
 
-expr([X|Rest],Rest):-id(X).% la cabeza es una expresion si solo si X es un id
-expr0([X|TSAfter],TSAfter, id(X)):- id(X).% hecho
-expr0([X|TSAfter],TSAfter, inte(X)):- integer(X).% hecho
-expr0([X|TSAfter],TSAfter, floate(X)):- float(X).% hecho
-expr0([X|TSAfter],TSAfter, stringe(X)):- string(X).% hecho
-expr0(['('|TSBefore],TSAfter,RT):- expr(TSBefore,[')'|TSAfter],RT).%hecho
-expr1([Expr0|Rest],TSAfter):-expr0(Expr0).% primera regla recursiva
-expr1([Expr1,Op2,Expr0|Rest],TSAfter):-expr1(Expr1),op2(Op2),expr0(Expr0).% segunda regla de recursividad        
-expr2([Expr1|TSAfter],TSAfter):-expr1(Expr1).% primera regla recursividad
-expr2([Expr2,Op1,Expr1|Rest],TSAfter):-expr2(Expr2),op1(Op1),expr1(Expr1).% segunda regla recursividad
+% Expresiones
+expr0([X|TSAfter],TSAfter):- id(X).% hecho
+expr0([X|TSAfter],TSAfter):- integer(X).% hecho
+expr0([X|TSAfter],TSAfter):- float(X).% hecho
+expr0([X|TSAfter],TSAfter):- string(X).% hecho
+expr0(['('|TSBefore],TSAfter):- expr(TSBefore,[')'|TSAfter]).%hecho
 
+expr1(TSBefore,TSAfter):-expr0(TSBefore, Rest).% Primera regla recursiva
+expr1(TSBefore,TSAfter):-
+	expr0(TSBefore,[Opr|TSAfter]).
+	op2(Op2).
+	expr0(TSBefore,TSAfter).% Segunda regla de recursividad        
+
+expr2(TSBefore,TSAfter):-expr1(TSBefore,TSAfter).% Primera regla recursividad
+expr2(TSBefore,TSAfter):-expr1(TSBefore,[Opr|TSAfter]),op1(Op1),expr(TSBefore,TSAfter).% Segunda regla recursividad
+
+% Programas
 
 program(TSBefore,TSAfter):- statement(TSBefore,TSAfter).
 statement(TSBefore,TSAfter):- functionCall(TSBefore,TSAfter).
@@ -102,11 +107,11 @@ assignStatement([V1,'=',V2|Rest],TSAfter):-
         id(V2),
         expr(Rest,TSAfter).% El resultado es una expresion y devuelve TSAfter
 
-
 functionCall([Fname,'(',Arg,')'|Rest],Rest):-
         id(Fname),
         id(Arg).
 
+% Llamadas de Programas
 
 chekProgram(FileName):-
 	open(FileName,'read',InputStream),
@@ -114,4 +119,4 @@ chekProgram(FileName):-
 	close(InputStream),
 	phrase(tokenize(TSBefore), ProgramString),
         write(TSBefore),
-	program(TSBefore,TSAfter).
+	program(TSBefore,[]).
