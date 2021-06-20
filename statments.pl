@@ -60,5 +60,16 @@ transpose([[I|Is]|Rs], [Col|MT]) :-
     first_column([[I|Is]|Rs], Col, [Is|NRs]),
     transpose([Is|NRs], MT).
 
+% Ciclo for
+ciclo_for(Last_value, Last_value) :- 
+    write(Last_value),
+    nl,  
+    write('fin'),
+    nl.  
 
-
+ciclo_for(entrada, salida) :- 
+    entrada =\= salida,
+    write(salida),  
+    nl,
+    N is entrada + 1,
+    ciclo_for(N, salida). 
