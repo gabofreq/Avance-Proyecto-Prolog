@@ -1,4 +1,7 @@
 consult('proyecto.pl')
 consult('statements.pl')
 
+% matrices
 Matrix :- [[a, b, c], [b, A, B|C], [c, B|D]], symmetric(Matrix), numbervars(Matrix, 0, _).
+% ciclo for
+ciclo_for(1,5).
