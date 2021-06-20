@@ -25,13 +25,33 @@ vector(Type, B):-
     protobuf_message(Proto, B).
 
 % Definicion de matrices por predicados
-row(M, N, Row) :-
-    nth1(N, M, Row).
+row(N, Matrix, Row) :-
+    nth1(N, Matrix, Row).
 
-column(M, N, Col) :-
-    transpose(M, MT),
-    row(MT, N, Col).
+col(N, Matrix, Col) :-
+    maplist(nth1(N), Matrix, Col).
 
+% Generates matrix elements
+element(RowN-ColN, Matrix, El) :-
+    row(RowN, Matrix, Row),
+    nth1(ColN, Row, El).
+
+% Generar matrices symetricas, i.e. where Aij = Aji.
+symmetric_element(Matrix, RowN-ColN) :-
+    element(RowN-ColN, Matrix, El),
+    element(ColN-RowN, Matrix, El).
+
+% Generado indeces para filas y columnas.
+get_index_pair(N, RowN-ColN) :-
+    between(1, N, RowN),
+    succ(RowN, RowN1),
+    between(RowN1, N, ColN).
+
+% Generador de matrices
+symmetric(Matrix) :-
+    length(Matrix, N),
+    findall(IndexPair, get_index_pair(N, IndexPair), IndexPairs),
+    maplist(symmetric_element(Matrix), IndexPairs).
 symmetrical(M) :-
     transpose(M, M).
 
@@ -40,8 +60,5 @@ transpose([[I|Is]|Rs], [Col|MT]) :-
     first_column([[I|Is]|Rs], Col, [Is|NRs]),
     transpose([Is|NRs], MT).
 
-first_column([], [], []).
-first_column([[]|_], [], []).
-first_column([[I|Is]|Rs], [I|Col], [Is|Rest]) :-
-    first_column(Rs, Col, Rest).
+
 
