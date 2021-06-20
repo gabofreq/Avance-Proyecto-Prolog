@@ -4,8 +4,12 @@ reverse([X|Y],Z,W) :- reverse(Y,[X|Z],W).
 reverse([],X,X).
 member(X,[X|R]).
 member(X,[Y|R]):- member(X,R).
+list_member(X,[X|_]).
+list_member(X,[_|R]) :- list_member(X,R).
+list_append(A,T,T) :- list_member(A,T),!.
+list_append(A,T,[A|T]).
 lookup(X,[X|_],[V|_],V).
-lookup(X,[_|Vars],[_|A],V) :- lookup(X,Vars,A,V).
+lookup(X,[_|R],[_|A],V) :- lookup(X,R,A,V).
 
 
 % Definicion de Vectores por predicados
