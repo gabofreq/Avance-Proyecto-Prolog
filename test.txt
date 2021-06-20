@@ -1,8 +1,4 @@
 consult('proyecto.pl')
 consult('statements.pl')
 
-
-matrix([[a,b,c],[d,e,f],[g,h,i]]). % ejemplo
-matrix(M), row(M, N, Row). % testing matrices por filas
-matrix(M), column(M, N, Col). % testing matrices por columnas
-matrix(M), symmetrical(M).
+Matrix :- [[a, b, c], [b, A, B|C], [c, B|D]], symmetric(Matrix), numbervars(Matrix, 0, _).
