@@ -35,23 +35,23 @@ row(N, Matrix, Row) :-
 col(N, Matrix, Col) :-
     maplist(nth1(N), Matrix, Col).
 
-% Generates matrix elements
+% Generador elementos matrices
 element(RowN-ColN, Matrix, El) :-
     row(RowN, Matrix, Row),
     nth1(ColN, Row, El).
 
-% Generar matrices symetricas, i.e. where Aij = Aji.
+% Generador elemento simetrico, i.e. where Aij = Aji.
 symmetric_element(Matrix, RowN-ColN) :-
     element(RowN-ColN, Matrix, El),
     element(ColN-RowN, Matrix, El).
 
-% Generado indeces para filas y columnas.
+% Generador indices para filas y columnas.
 get_index_pair(N, RowN-ColN) :-
     between(1, N, RowN),
     succ(RowN, RowN1),
     between(RowN1, N, ColN).
 
-% Generador de matrices
+% Generador de matrices simetricas
 symmetric(Matrix) :-
     length(Matrix, N),
     findall(IndexPair, get_index_pair(N, IndexPair), IndexPairs),
@@ -59,6 +59,7 @@ symmetric(Matrix) :-
 symmetrical(M) :-
     transpose(M, M).
 
+% clausula transpuesta
 transpose([[]|_], []) :- !.
 transpose([[I|Is]|Rs], [Col|MT]) :-
     first_column([[I|Is]|Rs], Col, [Is|NRs]),
