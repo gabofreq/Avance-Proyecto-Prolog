@@ -27,6 +27,9 @@ A continuación las reglas del lenguaje determinan como se combinan ciertos toke
 El objetivo es recibir un string e indicar si es o no es un <assignStmt> válido según esta gramática. En los siguientes avances deberán construir las piezas de la gramática que hacen el subset de Python un poco más complejo.
 
 -Un programa debe de consistir de varias sentencias/statements.
+  
 -Iteraciones y condicionales con anidación.
+  
 -Definición de funciones.
+  
 -Manejo de listas y matrices
