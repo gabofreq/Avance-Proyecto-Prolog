@@ -66,18 +66,12 @@ transpose([[I|Is]|Rs], [Col|MT]) :-
     transpose([Is|NRs], MT).
 
 % Ciclo for
-ciclo_for(Last_value, Last_value) :- 
-    write(Last_value),
-    nl,  
-    write('fin'),
-    nl.  
-
-ciclo_for(entrada, salida) :- 
-    entrada =\= salida,
-    write(salida),  
-    nl,
-    N is entrada + 1,
-    ciclo_for(N, salida). 
+for(X , Y , Z):-
+    X=<Y,
+    X1 is X+Z,
+    writeln(X),
+    for(X1 , Y , Z),
+    !.
 
 % simulador data frame de R
 r_data_frame(RVar, ColSpec, Goal) :-
