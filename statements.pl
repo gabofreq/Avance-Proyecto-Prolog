@@ -76,6 +76,23 @@ for(X , Y , Z):-
     writeln(X),
     for(X1 , Y , Z).
 
+% pregunta tamaño
+size([], 0, _).
+size([A|As], Rows, Cols) :-
+        valid([A|As]),
+        length(A, Cols),
+        length([A|As], Rows).
+
+valid([[A|As]|Ass]) :-
+    length([A|As], Cols),
+    valid(Ass, Cols).
+
+% 
+valid([], _).
+valid([A|As], Cols) :-
+    length(A, Cols),
+    valid(As, Cols).
+
 % simulador data frame de R
 r_data_frame(RVar, ColSpec, Goal) :-
 	must_be(atom, RVar),
