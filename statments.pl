@@ -70,8 +70,7 @@ for(X , Y , Z):-
     X=<Y,
     X1 is X+Z,
     writeln(X),
-    for(X1 , Y , Z),
-    !.
+    for(X1 , Y , Z).
 
 % simulador data frame de R
 r_data_frame(RVar, ColSpec, Goal) :-
