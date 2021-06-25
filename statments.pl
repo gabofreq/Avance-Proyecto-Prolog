@@ -12,29 +12,6 @@ lookup(X,[X|_],[V|_],V).
 lookup(X,[_|R],[_|A],V) :- lookup(X,R,A,V).
 
 
-% Definicion de Vectores por predicados
-vector_type(double(_List), 2).
-vector_type(float(_List), 3).
-vector_type(integer(_List), 4).
-vector_type(integer64(_List), 5).
-vector_type(integer32(_List), 6).
-vector_type(unsigned(_List), 7).
-vector_type(codes(_List), 8).
-vector_type(atom(_List), 9).
-vector_type(string(_List), 10).
-
-vector(Type, B):-
-    vector_type(Type, Tag),
-    Proto = protobuf([ repeated(Tag, Type) ]),
-    protobuf_message(Proto, B).
-
-% Definicion de matrices por predicados
-row(N, Matrix, Row) :-
-    nth1(N, Matrix, Row).
-
-col(N, Matrix, Col) :-
-    maplist(nth1(N), Matrix, Col).
-
 % Generador elementos matrices
 element(RowN-ColN, Matrix, El) :-
     row(RowN, Matrix, Row),
@@ -59,11 +36,38 @@ symmetric(Matrix) :-
 symmetrical(M) :-
     transpose(M, M).
 
-% clausula transpuesta
-transpose([[]|_], []) :- !.
-transpose([[I|Is]|Rs], [Col|MT]) :-
-    first_column([[I|Is]|Rs], Col, [Is|NRs]),
-    transpose([Is|NRs], MT).
+length_list(N, List) :- length(List, N).
+
+% Generar matriz de ceros
+zero_matrix(N, K) :-
+    zero_matrix(N, N, K).
+
+zero_matrix(0, _, []) :- !.
+zero_matrix(N, M, [K|Ks]) :-
+    N1 is N - 1,
+    zero_vector(M, K),
+    zero_matrix(N1, M, Ks).
+
+zero_vector(0, []) :- !.
+zero_vector(M, [0|Ks]) :-
+    M1 is M - 1,
+    zero_vector(M1, Ks).
+
+% transponer matriz
+transpose([A|As], At) :-
+    transpose(A, [A|As], At).
+
+transpose([], _, []).
+transpose([_|As], Rest, [At|Ats]) :-
+    first_column(Rest, At, NewRest),
+    transpose(As, NewRest, Ats).
+
+first_column([], [], []).
+first_column([[A|As]|Ass], [A|Acc], [As|Rest]) :-
+    first_column(Ass, Acc, Rest).
+
+% matriz simetrica
+symmetric(A) :- transpose(A, A).
 
 % Ciclo for
 for(X , Y , Z):-
