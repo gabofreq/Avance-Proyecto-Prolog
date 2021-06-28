@@ -15,3 +15,18 @@ symmetric([[1,2,3],[4,5,6],[7,8,9]]).
 
 % pregunta si el tamaño de la matriz es 2 filas 2 columnas
 size([[1,2],[3,4]],2,2).
+
+% sacar la media de una lista
+numlist(10, 100, Lista),
+a <- Lista,
+Mean <- mean(a).
+
+% ver vector secuencia
+A <- 1:10.
+% o
+A <- c(1,2,3,4,5,6,7,8,9,10)
+
+% Data Frame
+df <- data.frame([3.14,0,1,-1]),
+colnames(df) <- ["Valores"],
+<- df.
