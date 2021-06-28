@@ -22,11 +22,20 @@ a <- Lista,
 Mean <- mean(a).
 
 % ver vector secuencia
-A <- 1:10.
-% o
-A <- c(1,2,3,4,5,6,7,8,9,10)
+X <- seq(-1, 1, length= 10).
+Y <- 1:10.
+Z <- runif(10,0,10).
 
 % Data Frame
-df <- data.frame([3.14,0,1,-1]),
-colnames(df) <- ["Valores"],
+df <- data.frame([1,2,3,4,5,6,7,8,9,10],[-1,2,-2,3,4,-5,7,8,1,0]),
+colnames(df) <- ["Valores en X","Valores en Y"],
 <- df.
+X <- df, write(X).
+<- plot(df,type="l",main="Grafico ejemplo"),
+<- points(df,pch=19,col=c(3,2,1,4,3,2,5,4,3,8)).
+
+df <- data.frame([1,2,3,4,5,6,7,8,9,10],[-1,2,-2,3,4,-5,7,8,1,0],[-10,-2,5,7,6,5,1,10,-10,0]),
+colnames(df) <- ["Valores en X","Valores en Y","Valores en Z"],
+<- df.
+<- plot(df,pch=19,col=c(3,2,1,4,3,2,5,4,3,8)).
+<- graphics.off().
