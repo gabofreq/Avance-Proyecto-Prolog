@@ -94,14 +94,21 @@ valid([A|As], Cols) :-
     valid(As, Cols).
 
 % simulador data frame de R
+pack_install(real). 
+use_module(library(real)).
+use_module(library(apply)).   
+use_module(library(error)).
+use_module(library(pairs)).
+use_module(library(lists)). 
+
 r_data_frame(RVar, ColSpec, Goal) :-
 	must_be(atom, RVar),
-   	maplist(arg(1), ColSpec, Names),
-   	maplist(arg(2), ColSpec, Vars),
-   	Templ =.. [v|Vars],
-   	findall(Templ, Goal, Rows),
-   	r_data_frame_from_rows(RVar, Rows),
-   	colnames(RVar) <- Names.
+	maplist(arg(1), ColSpec, Names),
+	maplist(arg(2), ColSpec, Vars),
+	Templ =.. [v|Vars],
+	findall(Templ, Goal, Rows),
+	r_data_frame_from_rows(RVar, Rows),
+	colnames(RVar) <- Names.
 
 r_data_frame_to_dicts(DataFrame, Dicts) :-
 	Cols <- DataFrame,
@@ -112,7 +119,7 @@ r_data_frame_to_dicts(DataFrame, Dicts) :-
 	maplist(dict_cols(Templ, Dicts), ColNames, Cols).
 
 dict_cols(Templ, Dicts, Name, Col) :-
- 	maplist(fill_col(Templ, Name), Col, Dicts).
+	maplist(fill_col(Templ, Name), Col, Dicts).
 
 fill_col(_, Name, Value, Dict) :-
 	nonvar(Dict), !,
@@ -137,7 +144,7 @@ term_col(1, Arity, Functor, Value, Term) :- !,
 	functor(Term, Functor, Arity),
 	arg(1, Term, Value).
 
-6term_col(I, _, _, Value, Term) :-
+term_col(I, _, _, Value, Term) :-
 	arg(I, Term, Value).
 
 r_data_frame_from_dicts(DataFrame, Rows) :-
@@ -172,10 +179,3 @@ col_data(I, NCols, Rows, [ColI|ColR]) :-
 	col_data(I2, NCols, Rows, ColR).
 col_data(_, _, _, []).
 
-r_data_frame_colnames(DataFrame, ColNames) :-
-	ColNameStrings <- colnames(DataFrame),
-	maplist(atom_string, ColNames, ColNameStrings).
-
-r_data_frame_rownames(DataFrame, RowNames) :-
-	RowNameStrings <- rownames(DataFrame),
-	maplist(atom_string, RowNames, RowNameStrings).
